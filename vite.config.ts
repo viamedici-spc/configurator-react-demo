@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react";
 import checker from "vite-plugin-checker";
 
 export default defineConfig(({command, mode}) => ({
-    root: "wwwroot",
+    root: "src",
     server: {
         port: 3000
     },
