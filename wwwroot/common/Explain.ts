@@ -136,8 +136,8 @@ function mapConstraintExplanations(answer: { constraintExplanations: ReadonlyArr
 }
 
 function indent(str: string, indent: number = 2): string {
-    const indentation = [...Array(indent)].map(() => ' ').join('');
-    const lineEnding = '\n';
+    const indentation = [...Array(indent)].map(() => " ").join("");
+    const lineEnding = "\n";
 
     return str
         .split(lineEnding)

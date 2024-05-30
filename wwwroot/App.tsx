@@ -1,6 +1,6 @@
-import {createRoot} from 'react-dom/client';
+import {createRoot} from "react-dom/client";
 import Configurator from "./configurator/Configurator";
-import styled, {StyleSheetManager} from "styled-components";
+import styled from "styled-components";
 import {GlobalStyle} from "./GlobalStyle";
 
 const Root = styled.div`
