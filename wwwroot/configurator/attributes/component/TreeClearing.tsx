@@ -1,4 +1,4 @@
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import {useActiveAttribute} from "../AttributeItem";
 import {useComponentAttribute} from "@viamedici-spc/configurator-react";
 import {handleError} from "../../../common/PromiseErrorHandling";

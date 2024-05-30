@@ -1,5 +1,5 @@
 import Attributes from "./attributes/Attributes";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import ConfigurationSatisfactionIndicator from "./ConfigurationSatisfactionIndicator";
 import {Suspense} from "react";
 import {InitializationError, UpdateError} from "./ErrorIndicator";
