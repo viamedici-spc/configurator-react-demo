@@ -7,7 +7,7 @@
     "react-dom" : "18.2.0",
     "styled-components": "6.1.11",
     "@viamedici-spc/configurator-react": "1.0.0",
-    "@viamedici-spc/configurator-ts": "1.1.1"
+    "@viamedici-spc/configurator-ts": "1.2.0"
   },
   "devDependencies" : {
     "@types/react" : "18.0.28",
