@@ -15,7 +15,7 @@ export function handleError<T>(lazyPromise: () => Promise<T>, onResult?: (result
             const message = "An error occurred while executing the request:\n" + JSON.stringify(error, null, 4);
             const execute = onError && onError(error);
             if (execute != null) {
-                const confirmed = confirm(message + errorMessageAddition ? `\n\n${errorMessageAddition}` : "");
+                const confirmed = confirm(message + (errorMessageAddition ? `\n\n${errorMessageAddition}` : ""));
                 if (confirmed) {
                     execute();
                 }

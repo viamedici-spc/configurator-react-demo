@@ -32,6 +32,10 @@ export default function ValueSelection() {
         setPendingValue(null);
         console.info("Make decision for %s: %s", attributeIdToString(attribute.id), value !== undefined ? value.toString() : "Undefined");
 
+        if (value < attribute.range.min || value > attribute.range.max) {
+            alert(`Value is out of range [${attribute.range.min}; ${attribute.range.max}].`)
+            return;
+        }
         await handleDecisionResponse(() => makeDecision(value), e => {
             if (e.type === FailureType.ConfigurationModelNotFeasible || e.type === FailureType.ConfigurationConflict) {
                 return () => handleExplain(() => explain({question: ExplainQuestionType.whyIsStateNotPossible, state: value}, "full"), applySolution);
