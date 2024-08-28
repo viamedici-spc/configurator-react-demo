@@ -15,7 +15,7 @@ const falseValueId = "false";
 
 export default function ValueSelection() {
     const activeAttribute = useActiveAttribute();
-    const {attribute, makeDecision, explain,applySolution} = useBooleanAttribute(activeAttribute);
+    const {attribute, makeDecision, explain, applySolution} = useBooleanAttribute(activeAttribute);
 
     const onChange = async (valueId: string) => {
         if (valueId === nothingValueId) {
@@ -33,7 +33,7 @@ export default function ValueSelection() {
             } else {
                 console.info("Explain blocked value for %s: %s", attributeIdToString(attribute.id), value.toString());
 
-                handleExplain(() => explain({question: ExplainQuestionType.whyIsStateNotPossible, state: value}, "full"),applySolution);
+                handleExplain(() => explain({question: ExplainQuestionType.whyIsStateNotPossible, state: value}, "full"), applySolution);
             }
         }
     };

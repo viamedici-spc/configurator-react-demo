@@ -6,7 +6,7 @@ export const GlobalStyle = createGlobalStyle`
     color: var(--color-text);
     color-scheme: light dark;
     font-family: Verdana, sans-serif;
-    font-size: 14px;
+    font-size: 16px;
 
     --color-base-0: hsl(222deg, 10%, 95%);
     --color-base-1: hsl(0, 0%, 100%);

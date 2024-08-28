@@ -1,22 +1,17 @@
 {
   "compilerOptions": {
     "module": "ESNext",
-    "noImplicitAny": false,
     "noEmitOnError": false,
     "removeComments": true,
     "sourceMap": false,
-    "target": "es6",
+    "target": "ES2020",
     "jsx": "react-jsx",
     "pretty": true,
     "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "esModuleInterop": false,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "lib": [
-      "ESNext",
+      "ES2020",
       "dom"
     ]
   },

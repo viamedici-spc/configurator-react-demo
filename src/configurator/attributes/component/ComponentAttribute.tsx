@@ -1,12 +1,12 @@
 import styled from "styled-components";
 import ValueSelection from "./ValueSelection";
-import {SatisfactionIndicator} from "../Indicators";
 import TreeClearing from "./TreeClearing";
+import SatisfactionIndicator from "../SatisfactionIndicator";
 
 const Root = styled.div`
     grid-area: selection;
     display: grid;
-    grid-template-rows: [value-selection] auto [gap] 0.2em [indicators] auto;
+    grid-template-rows: [value-selection] auto [gap] 0.2em [indicators] 1.2em;
     grid-template-columns: [value-selection indicators] 1fr;
 `;
 

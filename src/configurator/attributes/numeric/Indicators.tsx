@@ -4,10 +4,9 @@ import {useNumericAttribute} from "@viamedici-spc/configurator-react";
 export function RangeIndicator() {
     const activeAttribute = useActiveAttribute();
     const {attribute} = useNumericAttribute(activeAttribute);
-    const color = "var(--color-allowed-values)";
 
     return (
-        <span style={{color: color}}>
+        <span style={{color: "var(--color-allowed-values)"}}>
            {`range [${attribute.range.min}; ${attribute.range.max}]`}
         </span>
     )

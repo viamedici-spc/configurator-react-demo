@@ -82,7 +82,7 @@ type Explanation = {
 function mapDecisionExplanations(answer: { decisionExplanations: ReadonlyArray<DecisionExplanation> }): Explanation[] {
     return answer.decisionExplanations
         .map(e => {
-            const causingDecisions = e.causedByDecisions.map(d => xyz(d));
+            const causingDecisions = e.causedByDecisions.map(mapCausedByDecision);
             const text = [
                 "Decisions:",
                 indent(causingDecisions.join("\n"))
@@ -95,7 +95,7 @@ function mapDecisionExplanations(answer: { decisionExplanations: ReadonlyArray<D
         });
 }
 
-function xyz(cause: CausedByDecision) {
+function mapCausedByDecision(cause: CausedByDecision) {
     switch (cause.type) {
         case AttributeType.Boolean:
         case AttributeType.Numeric:

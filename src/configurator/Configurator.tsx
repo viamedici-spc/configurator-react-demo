@@ -38,7 +38,7 @@ export default function Configurator() {
     return (
         <Root>
             <Header>
-                <h1>Configurator React Demo</h1>
+                <h1>Demo Configurator with React</h1>
             </Header>
 
             <Configuration configuratorClient={configuratorClient}

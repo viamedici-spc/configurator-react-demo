@@ -1,6 +1,6 @@
 {
-  "version": "1.0.0",
-  "name": "@viamedici-spc/configurator-react-demo-app",
+  "version": "0.0.0",
+  "name": "@viamedici-spc/configurator-react-demo",
   "private": true,
   "dependencies": {
     "@viamedici-spc/configurator-react": "1.0.0",
@@ -21,8 +21,8 @@
   },
   "scripts": {
     "build": "vite build",
-    "start": "vite dev",
-    "start:hot": "vite dev --mode hot",
+    "dev": "vite dev",
+    "dev:hot": "vite dev --mode hot",
     "build:preview": "npm run build && npm run preview",
     "preview": "vite preview",
     "postinstall": "npm-sort"

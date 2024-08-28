@@ -9,8 +9,7 @@ export default defineConfig(({command, mode}) => ({
     },
     build: {
         outDir: "../dist",
-        emptyOutDir: true,
-        minify: true
+        emptyOutDir: true
     },
     base: "",
     plugins: [
