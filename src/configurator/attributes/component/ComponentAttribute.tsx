@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import ValueSelection from "./ValueSelection";
-import TreeClearing from "./TreeClearing";
 import SatisfactionIndicator from "../SatisfactionIndicator";
 
 const Root = styled.div`
@@ -19,7 +18,6 @@ const Indicators = styled.div`
 export default function ComponentAttribute() {
     return (
         <>
-            <TreeClearing/>
             <Root>
                 <ValueSelection/>
                 <Indicators>

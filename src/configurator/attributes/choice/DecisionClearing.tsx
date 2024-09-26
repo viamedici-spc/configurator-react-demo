@@ -15,7 +15,7 @@ export default function DecisionClearing() {
     const activeAttribute = useActiveAttribute();
     const {attribute, clearDecisions} = useChoiceAttribute(activeAttribute);
 
-    if (attribute.values.filter(v => v.decision?.kind === DecisionKind.Explicit).length <= 1) {
+    if ([...attribute.values.values()].filter(v => v.decision?.kind === DecisionKind.Explicit).length <= 1) {
         return;
     }
 

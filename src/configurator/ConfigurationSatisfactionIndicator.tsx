@@ -1,14 +1,9 @@
 import styled from "styled-components";
-import {useConfiguration, useConfigurationInitialization, useExplain} from "@viamedici-spc/configurator-react";
+import {useConfigurationInitialization, useConfigurationSatisfaction, useExplain} from "@viamedici-spc/configurator-react";
 import {handleExplain} from "../common/Explain";
 
 const Root = styled.div`
-    margin-bottom: 1em;
-    display: grid;
-    grid-template-rows: [text explain-button] auto;
-    grid-template-columns: [text] auto [explain-button] auto;
-    gap: 0.5em;
-    justify-content: start;
+    grid-area: model-satisfaction;
     background-color: var(--color-unsatisfied-bg);
     color: var(--color-unsatisfied);
     padding: var(--size-card-padding);
@@ -22,15 +17,6 @@ const Root = styled.div`
     }
 `
 
-const Text=styled.span`
-    grid-area: text;
-    align-self: center;
-`
-
-const ExplainButton=styled.button`
-    grid-area: explain-button;
-`
-
 export default function ConfigurationSatisfactionIndicator() {
     const {isInitializing} = useConfigurationInitialization();
 
@@ -42,18 +28,19 @@ export default function ConfigurationSatisfactionIndicator() {
 }
 
 function Indicator() {
-    const {configuration} = useConfiguration();
-    const {explain, applySolution} = useExplain();
-    const isSatisfied = configuration.isSatisfied;
+    const {isSatisfied, explain} = useConfigurationSatisfaction();
+    const {applySolution} = useExplain();
 
     const onExplain = () => {
-        handleExplain(() => explain(b => b.whyIsNotSatisfied.configuration, "full"), applySolution);
+        handleExplain(() => explain("full"), applySolution);
     };
 
     return (
         <Root className={isSatisfied && "satisfied"}>
-            <Text>{isSatisfied ? "Configuration satisfied" : "Configuration unsatisfied"}</Text>
-            {!isSatisfied && <ExplainButton onClick={onExplain}>Explain</ExplainButton>}
+            <div>{isSatisfied ? "Configuration satisfied" : "Configuration unsatisfied"}</div>
+            {!isSatisfied && <div>
+                <button onClick={onExplain}>Explain</button>
+            </div>}
         </Root>
     )
 }

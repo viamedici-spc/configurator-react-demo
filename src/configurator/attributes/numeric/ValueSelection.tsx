@@ -2,8 +2,9 @@ import styled from "styled-components";
 import {useState} from "react";
 import {useActiveAttribute} from "../AttributeItem";
 import {useNumericAttribute} from "@viamedici-spc/configurator-react";
+import {ConfiguratorErrorType} from "@viamedici-spc/configurator-ts";
 import {handleDecisionResponse} from "../../../common/PromiseErrorHandling";
-import {ExplainQuestionType, FailureType} from "@viamedici-spc/configurator-ts";
+import {ExplainQuestionType} from "@viamedici-spc/configurator-ts";
 import {attributeIdToString} from "../../../common/Naming";
 import {handleExplain} from "../../../common/Explain";
 
@@ -37,7 +38,7 @@ export default function ValueSelection() {
             return;
         }
         await handleDecisionResponse(() => makeDecision(value), e => {
-            if (e.type === FailureType.ConfigurationModelNotFeasible || e.type === FailureType.ConfigurationConflict) {
+            if (e.type === ConfiguratorErrorType.SetDecisionConflict) {
                 return () => handleExplain(() => explain({question: ExplainQuestionType.whyIsStateNotPossible, state: value}, "full"), applySolution);
             }
 

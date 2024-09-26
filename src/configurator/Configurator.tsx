@@ -3,8 +3,8 @@ import styled from "styled-components";
 import ConfigurationSatisfactionIndicator from "./ConfigurationSatisfactionIndicator";
 import {Suspense} from "react";
 import {InitializationError, UpdateError} from "./ErrorIndicator";
-import {Configuration, ConfigurationSuspender} from "@viamedici-spc/configurator-react";
-import {AllowedRulesInExplainType, ClientSideLifeTimeHandlerOptions, ConfigurationModelFromChannel, ConfigurationModelSourceType, createClient} from "@viamedici-spc/configurator-ts";
+import {Configuration} from "@viamedici-spc/configurator-react";
+import {AllowedRulesInExplainType, ConfigurationModelSourceType, SessionContext} from "@viamedici-spc/configurator-ts";
 import * as config from "../config";
 
 const Root = styled.div`
@@ -24,15 +24,18 @@ const Main = styled.div`
     grid-template-columns: [error-indicator attributes] 1fr;
 `;
 
-const configuratorClient = createClient({
-    sessionHandler: {accessToken: config.hcaEngineAccessToken} satisfies ClientSideLifeTimeHandlerOptions,
-    hcaEngineBaseUrl: config.hcaEngineEndpoint
-});
-const configurationModelSource = {
-    type: ConfigurationModelSourceType.Channel,
-    deploymentName: config.configurationModelPackage.deploymentName,
-    channel: config.configurationModelPackage.channel
-} satisfies ConfigurationModelFromChannel;
+const sessionContext: SessionContext = {
+    apiBaseUrl: config.hcaEngineEndpoint,
+    sessionInitialisationOptions: {
+        accessToken: config.hcaEngineAccessToken,
+    },
+    configurationModelSource: {
+        type: ConfigurationModelSourceType.Channel,
+        deploymentName: config.configurationModelPackage.deploymentName,
+        channel: config.configurationModelPackage.channel
+    },
+    allowedInExplain: {rules: {type: AllowedRulesInExplainType.all}}
+};
 
 export default function Configurator() {
     return (
@@ -41,9 +44,7 @@ export default function Configurator() {
                 <h1>Demo Configurator with React</h1>
             </Header>
 
-            <Configuration configuratorClient={configuratorClient}
-                           configurationModelSource={configurationModelSource}
-                           allowedInExplain={{rules: {type: AllowedRulesInExplainType.all}}}>
+            <Configuration sessionContext={sessionContext}>
 
                 <ConfigurationSatisfactionIndicator/>
 
@@ -52,10 +53,7 @@ export default function Configurator() {
 
                     <Suspense fallback={<span>Configuration loading …</span>}>
                         <UpdateError/>
-
-                        <ConfigurationSuspender>
-                            <Attributes/>
-                        </ConfigurationSuspender>
+                        <Attributes/>
                     </Suspense>
                 </Main>
 
