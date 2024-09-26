@@ -1,4 +1,4 @@
-import {AttributeInterpreter, ChoiceValueDecisionState, ChoiceValueId, DecisionKind, ExplainQuestionType,} from "@viamedici-spc/configurator-ts";
+import {ChoiceValueDecisionState, ChoiceValueId, ConfiguratorErrorType, DecisionKind, ExplainQuestionType,} from "@viamedici-spc/configurator-ts";
 import {useActiveAttribute} from "../AttributeItem";
 import {useChoiceAttribute} from "@viamedici-spc/configurator-react";
 import {handleDecisionResponse} from "../../../common/PromiseErrorHandling";
@@ -13,31 +13,39 @@ const nothingChoiceValueId = "<nothing>";
 
 export default function ValueSelection() {
     const activeAttribute = useActiveAttribute();
-    const {attribute, makeDecision, explain, applySolution, clearDecisions} = useChoiceAttribute(activeAttribute);
-    const allowedChoiceValues = AttributeInterpreter.getAllowedChoiceValues(attribute)
+    const {attribute, makeDecision, explain, applySolution, clearDecisions, getAllowedChoiceValues, getIncludedChoiceValues, getBlockedChoiceValues, isMultiSelect} = useChoiceAttribute(activeAttribute);
+    const allowedChoiceValues = getAllowedChoiceValues()
         .map(v => ({id: v.id, isImplicit: v.decision?.kind === DecisionKind.Implicit} satisfies Value<ChoiceValueId>));
-    const blockedChoiceValues = AttributeInterpreter.getBlockedChoiceValues(attribute);
-    const isMultiselect = AttributeInterpreter.isMultiSelect(attribute);
-    const selectedChoiceValueIds = AttributeInterpreter.getSelectedChoiceValues(attribute)
+    const includedChoiceValueIds = getIncludedChoiceValues()
         .map(a => a.id satisfies ChoiceValueId);
-    const selectedChoiceValueId = selectedChoiceValueIds[0] ?? nothingChoiceValueId;
+    const includedChoiceValueId = includedChoiceValueIds[0] ?? nothingChoiceValueId;
 
     const onChange = async (choiceValueId: ChoiceValueId) => {
         if (choiceValueId === nothingChoiceValueId) {
-            if (selectedChoiceValueIds.length === 1) {
-                console.info("Reset decision for %s.%s", attributeIdToString(attribute.id), selectedChoiceValueId);
-                await handleDecisionResponse(() => makeDecision(selectedChoiceValueId, null));
-            } else if (selectedChoiceValueIds.length > 1) {
-                console.info("Reset all decisions for %s", attributeIdToString(attribute.id), selectedChoiceValueId);
+            if (includedChoiceValueIds.length === 1) {
+                console.info("Reset decision for %s.%s", attributeIdToString(attribute.id), includedChoiceValueId);
+                await handleDecisionResponse(() => makeDecision(includedChoiceValueId, null));
+            } else if (includedChoiceValueIds.length > 1) {
+                console.info("Reset all decisions for %s", attributeIdToString(attribute.id), includedChoiceValueId);
                 await handleDecisionResponse(() => clearDecisions());
             }
         } else if (allowedChoiceValues.some(v => v.id === choiceValueId)) {
             console.info("Make decision for %s.%s", attributeIdToString(attribute.id), choiceValueId);
-            const state = selectedChoiceValueIds.some(v => v === choiceValueId)
+            const state = includedChoiceValueIds.some(v => v === choiceValueId)
                 ? null
                 : ChoiceValueDecisionState.Included;
 
-            await handleDecisionResponse(() => makeDecision(choiceValueId, state));
+            await handleDecisionResponse(() => makeDecision(choiceValueId, state),
+                (e) => {
+                    if (e.type === ConfiguratorErrorType.ConflictWithConsequence) {
+                        return () => handleExplain(() => explain({
+                            question: ExplainQuestionType.whyIsStateNotPossible,
+                            choiceValueId: choiceValueId,
+                            state,
+                        }, "full"), s => applySolution(s));
+                    }
+                    return null;
+                });
         } else if (choiceValueId != null && choiceValueId !== "") {
             console.info("Explain blocked value for %s.%s", attributeIdToString(attribute.id), choiceValueId);
 
@@ -47,11 +55,11 @@ export default function ValueSelection() {
 
     return (
         <CommonValueSelection
-            nothingValue={{id: nothingChoiceValueId, name: selectedChoiceValueIds.length > 0 ? "Reset" : ""}}
+            nothingValue={{id: nothingChoiceValueId, name: includedChoiceValueIds.length > 0 ? "Reset" : ""}}
             allowedValues={allowedChoiceValues}
-            blockedValues={blockedChoiceValues}
-            isMultiselect={isMultiselect}
-            selectedValues={isMultiselect ? selectedChoiceValueIds : selectedChoiceValueId}
+            blockedValues={getBlockedChoiceValues()}
+            isMultiselect={isMultiSelect()}
+            selectedValues={isMultiSelect() ? includedChoiceValueIds : includedChoiceValueId}
             onChange={onChange}
         />
     )

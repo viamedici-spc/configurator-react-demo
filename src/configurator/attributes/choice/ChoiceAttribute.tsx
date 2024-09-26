@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import {AvailableValuesIndicator, MandatoryIndicator, SelectionModeIndicator} from "./Indicators";
 import ValueSelection from "./ValueSelection";
-import DecisionClearing from "./DecisionClearing";
 import SatisfactionIndicator from "../SatisfactionIndicator";
 
 const Root = styled.div`
@@ -19,17 +18,16 @@ const Indicators = styled.div`
 export default function ChoiceAttribute() {
     return (
         <>
-            <DecisionClearing/>
             <Root>
                 <ValueSelection/>
                 <Indicators>
                     <SatisfactionIndicator/>
                     <span> · </span>
-                    <AvailableValuesIndicator/>
-                    <span> · </span>
                     <MandatoryIndicator/>
                     <span> · </span>
                     <SelectionModeIndicator/>
+                    <span> · </span>
+                    <AvailableValuesIndicator/>
                 </Indicators>
             </Root>
         </>
