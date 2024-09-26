@@ -37,7 +37,7 @@ export default function ValueSelection() {
             return;
         }
         await handleDecisionResponse(() => makeDecision(value), e => {
-            if (e.type === FailureType.ConfigurationModelNotFeasible || e.type === FailureType.ConfigurationConflict) {
+            if (e.type === FailureType.ConfigurationConflict) {
                 return () => handleExplain(() => explain({question: ExplainQuestionType.whyIsStateNotPossible, state: value}, "full"), applySolution);
             }
 
