@@ -6,19 +6,26 @@ import {InitializationError, UpdateError} from "./ErrorIndicator";
 import {Configuration} from "@viamedici-spc/configurator-react";
 import {AllowedRulesInExplainType, ConfigurationModelSourceType, SessionContext} from "@viamedici-spc/configurator-ts";
 import * as config from "../config";
+import Menu from "./Menu";
 
 const Root = styled.div`
     max-width: 1250px;
     flex-grow: 1;
+    display: grid;
+    grid-template-rows: [header] auto [satisfaction menu] auto [gap] 1em [main] auto;
+    grid-template-columns: [satisfaction header-start main-start] 1fr [gap] 1em [menu] auto [header-end main-end];
+    align-content: start;
 `;
 
 const Header = styled.div`
+    grid-area: header;
     display: grid;
     grid-template-columns: [title] 1fr auto;
     margin-top: 1em;
 `;
 
 const Main = styled.div`
+    grid-area: main;
     display: grid;
     grid-template-rows:[error-indicator attributes] auto;
     grid-template-columns: [error-indicator attributes] 1fr;
@@ -45,18 +52,17 @@ export default function Configurator() {
             </Header>
 
             <Configuration sessionContext={sessionContext}>
+                <Suspense fallback={<span>Configuration loading …</span>}>
+                    <ConfigurationSatisfactionIndicator/>
+                    <Menu/>
 
-                <ConfigurationSatisfactionIndicator/>
+                    <Main>
+                        <InitializationError/>
 
-                <Main>
-                    <InitializationError/>
-
-                    <Suspense fallback={<span>Configuration loading …</span>}>
                         <UpdateError/>
                         <Attributes/>
-                    </Suspense>
-                </Main>
-
+                    </Main>
+                </Suspense>
             </Configuration>
         </Root>
     )

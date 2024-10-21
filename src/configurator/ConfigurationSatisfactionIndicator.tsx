@@ -3,7 +3,13 @@ import {useConfigurationInitialization, useConfigurationSatisfaction, useExplain
 import {handleExplain} from "../common/Explain";
 
 const Root = styled.div`
-    grid-area: model-satisfaction;
+    grid-area: satisfaction;
+    display: grid;
+    grid-template-rows: [text explain-button] auto;
+    grid-template-columns: [text] auto [explain-button] auto;
+    gap: 0.5em;
+    justify-content: start;
+    align-content: center;
     background-color: var(--color-unsatisfied-bg);
     color: var(--color-unsatisfied);
     padding: var(--size-card-padding);
@@ -17,17 +23,16 @@ const Root = styled.div`
     }
 `
 
+const Text = styled.div`
+    grid-area: text;
+    align-self: center;
+`
+
+const ExplainButton = styled.button`
+    grid-area: explain-button;
+`
+
 export default function ConfigurationSatisfactionIndicator() {
-    const {isInitializing} = useConfigurationInitialization();
-
-    if (isInitializing) {
-        return null;
-    }
-
-    return <Indicator/>
-}
-
-function Indicator() {
     const {isSatisfied, explain} = useConfigurationSatisfaction();
     const {applySolution} = useExplain();
 
@@ -37,10 +42,10 @@ function Indicator() {
 
     return (
         <Root className={isSatisfied && "satisfied"}>
-            <div>{isSatisfied ? "Configuration satisfied" : "Configuration unsatisfied"}</div>
-            {!isSatisfied && <div>
-                <button onClick={onExplain}>Explain</button>
-            </div>}
+            <Text>
+                {isSatisfied ? "Configuration satisfied" : "Configuration unsatisfied"}
+            </Text>
+            {!isSatisfied && <ExplainButton onClick={onExplain}>Explain</ExplainButton>}
         </Root>
     )
 }

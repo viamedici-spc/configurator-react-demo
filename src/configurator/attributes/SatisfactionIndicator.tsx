@@ -20,7 +20,7 @@ export default function SatisfactionIndicator() {
     const color = attribute.canContributeToConfigurationSatisfaction ? "var(--color-mandatory)" : attribute.isSatisfied ? "var(--color-satisfied)" : "var(--color-unsatisfied)";
     return (<>
         <span style={{color: color}}>
-            {attribute.isSatisfied ? (`satisfied${attribute.canContributeToConfigurationSatisfaction ? " (can contribute)" : ""}`) : "unsatisfied "}
+            {attribute.isSatisfied ? (`satisfied${attribute.canContributeToConfigurationSatisfaction ? " (can contribute)" : ""}`) : "unsatisfied"}
         </span>
         {!attribute.isSatisfied && <ExplainButton onClick={onExplain}>Explain</ExplainButton>}
     </>);

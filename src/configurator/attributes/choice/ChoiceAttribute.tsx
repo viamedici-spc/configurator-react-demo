@@ -25,11 +25,11 @@ export default function ChoiceAttribute() {
                 <Indicators>
                     <SatisfactionIndicator/>
                     <span> · </span>
-                    <AvailableValuesIndicator/>
-                    <span> · </span>
                     <MandatoryIndicator/>
                     <span> · </span>
                     <SelectionModeIndicator/>
+                    <span> · </span>
+                    <AvailableValuesIndicator/>
                 </Indicators>
             </Root>
         </>
