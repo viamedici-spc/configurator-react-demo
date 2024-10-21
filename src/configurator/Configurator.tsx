@@ -52,17 +52,21 @@ export default function Configurator() {
             </Header>
 
             <Configuration sessionContext={sessionContext}>
-                <Suspense fallback={<span>Configuration loading …</span>}>
-                    <ConfigurationSatisfactionIndicator/>
-                    <Menu/>
 
-                    <Main>
-                        <InitializationError/>
+               <Suspense>
+                   <ConfigurationSatisfactionIndicator/>
+                   <Menu/>
+               </Suspense>
 
+                <Main>
+                    <InitializationError/>
+
+                    <Suspense fallback={<span>Configuration loading …</span>}>
                         <UpdateError/>
                         <Attributes/>
-                    </Main>
-                </Suspense>
+                    </Suspense>
+                </Main>
+
             </Configuration>
         </Root>
     )
