@@ -3,7 +3,7 @@
   "name": "@viamedici-spc/configurator-react-demo",
   "private": true,
   "dependencies": {
-    "@viamedici-spc/configurator-react": "1.1.0-version2-20241021134409",
+    "@viamedici-spc/configurator-react": "1.1.0-version2-20241022081459",
     "@viamedici-spc/configurator-ts": "2.0.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
