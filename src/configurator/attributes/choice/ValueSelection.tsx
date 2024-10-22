@@ -1,4 +1,4 @@
-import {AttributeInterpreter, ChoiceValueDecisionState, ChoiceValueId, ConfiguratorErrorType, DecisionKind, ExplainQuestionType,} from "@viamedici-spc/configurator-ts";
+import {ChoiceValueDecisionState, ChoiceValueId, ConfiguratorErrorType, DecisionKind, ExplainQuestionType,} from "@viamedici-spc/configurator-ts";
 import {useActiveAttribute} from "../AttributeItem";
 import {useChoiceAttribute} from "@viamedici-spc/configurator-react";
 import {handleDecisionResponse} from "../../../common/PromiseErrorHandling";
