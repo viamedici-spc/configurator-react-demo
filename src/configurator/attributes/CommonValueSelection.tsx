@@ -7,13 +7,18 @@ const Root = styled.select`
 export type Value<TId extends string> = {
     id: TId,
     name?: string,
-    isImplicit?: boolean
+}
+
+export type AllowedValue<TId extends string> = Value<TId> & {
+    isImplicit: boolean
+    isImmutable: boolean
 }
 
 type Props<TId extends string> = {
     nothingValue: Value<TId>,
-    allowedValues: ReadonlyArray<Value<TId>>,
+    allowedValues: ReadonlyArray<AllowedValue<TId>>,
     blockedValues: ReadonlyArray<Value<TId>>,
+    unavailableValues?: ReadonlyArray<Value<TId>>,
     isMultiselect: boolean,
     selectedValues: TId | TId[],
     onChange: (value: TId) => void
@@ -22,6 +27,7 @@ type Props<TId extends string> = {
 export default function CommonValueSelection<TId extends string>(props: Props<TId>) {
     const allowedValues = props.allowedValues.filter(Boolean);
     const blockedValues = props.blockedValues.filter(Boolean);
+    const unavailableValues = props.unavailableValues ? props.unavailableValues.filter(Boolean) : [];
 
     return (
         <Root value={props.selectedValues}
@@ -41,14 +47,21 @@ export default function CommonValueSelection<TId extends string>(props: Props<TI
                     ))}
                 </optgroup>
             )}
+            {unavailableValues.length > 0 && (
+                <optgroup label="Unavailable">
+                    {unavailableValues.map(v => (
+                        <Option key={v.id} value={v}/>
+                    ))}
+                </optgroup>
+            )}
         </Root>
     )
 }
 
-function Option<TId extends string>({value}: { value: Value<TId> }) {
+function Option<TId extends string>({ value }: { value: Value<TId> }) {
     return (
         <option key={value.id} value={value.id}>
-            {value.isImplicit ? "Implicit: " : ""}
+            {"isImplicit" in value && value.isImplicit ? ("isImmutable" in value && value.isImmutable ? "Fixed: " : "Implicit: ") : ""}
             {value.name ?? value.id}
         </option>
     );

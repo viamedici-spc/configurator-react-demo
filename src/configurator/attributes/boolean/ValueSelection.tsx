@@ -1,10 +1,10 @@
-import {useActiveAttribute} from "../AttributeItem";
-import {useBooleanAttribute} from "@viamedici-spc/configurator-react";
-import {ConfiguratorErrorType, DecisionKind, ExplainQuestionType, } from "@viamedici-spc/configurator-ts";
-import {handleDecisionResponse} from "../../../common/PromiseErrorHandling";
-import {attributeIdToString} from "../../../common/Naming";
-import CommonValueSelection, {Value} from "../CommonValueSelection";
-import {handleExplain} from "../../../common/Explain";
+import { useActiveAttribute } from "../AttributeItem";
+import { useBooleanAttribute } from "@viamedici-spc/configurator-react";
+import { ConfiguratorErrorType, DecisionKind, ExplainQuestionType, } from "@viamedici-spc/configurator-ts";
+import { handleDecisionResponse } from "../../../common/PromiseErrorHandling";
+import { attributeIdToString } from "../../../common/Naming";
+import CommonValueSelection, { AllowedValue } from "../CommonValueSelection";
+import { handleExplain } from "../../../common/Explain";
 
 /*
     Value id for "nothing selected"-option resp. reset-option
@@ -15,7 +15,7 @@ const falseValueId = "false";
 
 export default function ValueSelection() {
     const activeAttribute = useActiveAttribute();
-    const {attribute, makeDecision, explain, applySolution} = useBooleanAttribute(activeAttribute);
+    const { attribute, makeDecision, explain, applySolution } = useBooleanAttribute(activeAttribute);
 
     const onChange = async (valueId: string) => {
         if (valueId === nothingValueId) {
@@ -43,7 +43,7 @@ export default function ValueSelection() {
             } else {
                 console.info("Explain blocked value for %s: %s", attributeIdToString(attribute.id), value.toString());
 
-                await handleExplain(() => explain({question: ExplainQuestionType.whyIsStateNotPossible, state: value}, "full"), applySolution);
+                await handleExplain(() => explain({ question: ExplainQuestionType.whyIsStateNotPossible, state: value }, "full"), applySolution);
             }
         }
     };
@@ -56,15 +56,17 @@ export default function ValueSelection() {
 
     const isTrueValuePossible = attribute.possibleDecisionStates.includes(true);
     const isFalseValuePossible = attribute.possibleDecisionStates.includes(false);
-    const falseValue: Value<string> = {
+    const falseValue: AllowedValue<string> = {
         id: falseValueId,
         name: "no",
-        isImplicit: attribute.decision?.state === false && attribute.decision?.kind === DecisionKind.Implicit
+        isImplicit: attribute.decision?.state === false && attribute.decision?.kind === DecisionKind.Implicit,
+        isImmutable: attribute.isPossibleDecisionStatesImmutable
     };
-    const trueValue: Value<string> = {
+    const trueValue: AllowedValue<string> = {
         id: trueValueId,
         name: "yes",
-        isImplicit: attribute.decision?.state === true && attribute.decision?.kind === DecisionKind.Implicit
+        isImplicit: attribute.decision?.state === true && attribute.decision?.kind === DecisionKind.Implicit,
+        isImmutable: attribute.isPossibleDecisionStatesImmutable
     };
     const allowedValues = [
         isFalseValuePossible && falseValue,
@@ -77,7 +79,7 @@ export default function ValueSelection() {
 
     return (
         <CommonValueSelection
-            nothingValue={{id: nothingValueId, name: selectedValue !== nothingValueId ? "Reset" : ""}}
+            nothingValue={{ id: nothingValueId, name: selectedValue !== nothingValueId ? "Reset" : "" }}
             allowedValues={allowedValues}
             blockedValues={blockedValues}
             isMultiselect={false}
