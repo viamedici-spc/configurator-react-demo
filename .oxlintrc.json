@@ -15,8 +15,7 @@
         "destructuredArrayIgnorePattern": "^_",
         "caughtErrorsIgnorePattern": "^_"
       }
-    ],
-    "vitest/require-mock-type-parameters": "off"
+    ]
   },
   "ignorePatterns": ["dist/**"]
 }
