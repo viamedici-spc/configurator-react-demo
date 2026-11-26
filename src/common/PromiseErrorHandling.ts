@@ -1,4 +1,4 @@
-import {ConfiguratorError} from "@viamedici-spc/configurator-ts";
+import type {ConfiguratorError} from "@viamedici-spc/configurator-ts";
 
 export function handleDecisionResponse<T>(lazyPromise: () => Promise<T>, explain?: (error: ConfiguratorError) => (() => void) | null): Promise<void> {
     return handleError(lazyPromise, undefined, explain, "Press Ok to Explain");

@@ -3,7 +3,8 @@ import { useBooleanAttribute } from "@viamedici-spc/configurator-react";
 import { ConfiguratorErrorType, DecisionKind, ExplainQuestionType, } from "@viamedici-spc/configurator-ts";
 import { handleDecisionResponse } from "../../../common/PromiseErrorHandling";
 import { attributeIdToString } from "../../../common/Naming";
-import CommonValueSelection, { AllowedValue } from "../CommonValueSelection";
+import type { AllowedValue } from "../CommonValueSelection";
+import CommonValueSelection from "../CommonValueSelection";
 import { handleExplain } from "../../../common/Explain";
 
 /*

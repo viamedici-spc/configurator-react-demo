@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {useConfigurationInitialization, useConfigurationSatisfaction, useExplain} from "@viamedici-spc/configurator-react";
+import {useConfigurationSatisfaction, useExplain} from "@viamedici-spc/configurator-react";
 import {handleExplain} from "../common/Explain";
 
 const Root = styled.div`

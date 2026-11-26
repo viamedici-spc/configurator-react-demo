@@ -1,9 +1,11 @@
-import { ChoiceValueDecisionState, ChoiceValueId, ConfiguratorErrorType, DecisionKind, ExplainQuestionType, } from "@viamedici-spc/configurator-ts";
+import type { ChoiceValueId} from "@viamedici-spc/configurator-ts";
+import { ChoiceValueDecisionState, ConfiguratorErrorType, DecisionKind, ExplainQuestionType, } from "@viamedici-spc/configurator-ts";
 import { useActiveAttribute } from "../AttributeItem";
 import { useChoiceAttribute } from "@viamedici-spc/configurator-react";
 import { handleDecisionResponse } from "../../../common/PromiseErrorHandling";
 import { attributeIdToString } from "../../../common/Naming";
-import CommonValueSelection, { AllowedValue } from "../CommonValueSelection";
+import type { AllowedValue } from "../CommonValueSelection";
+import CommonValueSelection from "../CommonValueSelection";
 import { handleExplain } from "../../../common/Explain";
 
 /*

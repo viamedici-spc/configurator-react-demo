@@ -4,12 +4,14 @@ import ConfigurationSatisfactionIndicator from "./ConfigurationSatisfactionIndic
 import {Suspense, useMemo, useState} from "react";
 import {InitializationError, UpdateError} from "./ErrorIndicator";
 import {Configuration} from "@viamedici-spc/configurator-react";
+import type {
+    SessionContext
+} from "@viamedici-spc/configurator-ts";
 import {
     AllowedRulesInExplainType,
     AttributeType,
     ChoiceValueDecisionState,
-    ConfigurationModelSourceType,
-    SessionContext
+    ConfigurationModelSourceType
 } from "@viamedici-spc/configurator-ts";
 import * as config from "../config";
 import Menu from "./Menu";

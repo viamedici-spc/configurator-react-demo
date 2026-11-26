@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import {useConfigurationStoring} from "@viamedici-spc/configurator-react";
-import {StoredConfiguration} from "@viamedici-spc/configurator-ts";
+import type {StoredConfiguration} from "@viamedici-spc/configurator-ts";
 import {useCallback} from "react";
 
 const Root = styled.div`

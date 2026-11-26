@@ -1,5 +1,4 @@
-import {
-    AttributeType,
+import type {
     CausedByDecision,
     ConstraintExplanation,
     ConstraintsExplainAnswer,
@@ -7,6 +6,9 @@ import {
     DecisionsExplainAnswer,
     ExplainAnswer,
     ExplainSolution, SetManyResult
+} from "@viamedici-spc/configurator-ts";
+import {
+    AttributeType
 } from "@viamedici-spc/configurator-ts";
 import {attributeIdToString, constraintIdToString} from "./Naming";
 import {handleError} from "./PromiseErrorHandling";

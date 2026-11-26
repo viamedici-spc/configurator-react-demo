@@ -1,4 +1,4 @@
-import {GlobalAttributeId, GlobalConstraintId} from "@viamedici-spc/configurator-ts";
+import type {GlobalAttributeId, GlobalConstraintId} from "@viamedici-spc/configurator-ts";
 
 export function attributeIdToString(attributeId: GlobalAttributeId): string {
     const sharedModel = attributeId.sharedConfigurationModelId && `shared::${attributeId.sharedConfigurationModelId}`;

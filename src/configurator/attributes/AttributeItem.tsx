@@ -1,4 +1,5 @@
-import {Attribute, AttributeType, GlobalAttributeId} from "@viamedici-spc/configurator-ts";
+import type {Attribute, GlobalAttributeId} from "@viamedici-spc/configurator-ts";
+import { AttributeType} from "@viamedici-spc/configurator-ts";
 import styled from "styled-components";
 import NumericAttribute from "./numeric/NumericAttribute";
 import ChoiceAttribute from "./choice/ChoiceAttribute";
