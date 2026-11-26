@@ -49,7 +49,8 @@ You can follow the workflow below to see these features in action:
 
 ## Run Locally
 
-To run the demo application locally, follow these steps:
+To run the demo application locally, you need [Bun](https://bun.sh), in the version that `packageManager` in
+`package.json` names. Then follow these steps:
 
 1. **Clone the repository:**
     ```bash
@@ -64,13 +65,11 @@ To run the demo application locally, follow these steps:
 3. **Install dependencies:**
    ```bash
    bun install
-   yarn install
    ```
 
 4. **Start the development server:**
    ```bash
    bun run dev
-   yarn run dev
    ```
 
 ## License
