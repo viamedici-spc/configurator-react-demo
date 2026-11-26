@@ -23,7 +23,7 @@ export function handleError<T>(
             console.error(error);
 
             const message = "An error occurred while executing the request:\n" + JSON.stringify(error, null, 4);
-            const execute = "type" in error && onError && onError(error);
+            const execute = "type" in error && onError ? onError(error) : null;
             if (execute != null) {
                 const confirmed = confirm(message + (errorMessageAddition ? `\n\n${errorMessageAddition}` : ""));
                 if (confirmed) {
