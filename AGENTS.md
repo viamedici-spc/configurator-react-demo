@@ -19,8 +19,9 @@
 - `bun run dev` starts the Vite dev server on `http://localhost:3000` (with React Fast Refresh).
 - `bun run verify` is the gate, its steps in parallel: `bun check`, oxlint, `bun fmt --check`, the build.
 - `bun run build` builds the app into `dist/`; `bun run preview` serves the build.
-- CI (`.github/workflows/deploy.yml`) builds every push on the shared `pages-bun` workflow; it deploys to GitHub Pages
-  only on a manual run (`workflow_dispatch`) on `main`.
+- CI (`.github/workflows/deploy.yml`) builds every push and pull request (a branch with an open pull request builds
+  twice) on the shared `pages-bun` workflow; it deploys to GitHub Pages only on a manual run (`workflow_dispatch`) on
+  `main`.
 
 ## Coding Style & Naming Conventions
 - TypeScript + React; `.tsx` for components; 4-space indentation; semicolons.
