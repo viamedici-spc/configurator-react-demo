@@ -21,16 +21,16 @@ const Root = styled.div`
         background-color: var(--color-satisfied-bg);
         color: var(--color-satisfied);
     }
-`
+`;
 
 const Text = styled.div`
     grid-area: text;
     align-self: center;
-`
+`;
 
 const ExplainButton = styled.button`
     grid-area: explain-button;
-`
+`;
 
 export default function ConfigurationSatisfactionIndicator() {
     const {isSatisfied, explain} = useConfigurationSatisfaction();
@@ -42,10 +42,8 @@ export default function ConfigurationSatisfactionIndicator() {
 
     return (
         <Root className={isSatisfied && "satisfied"}>
-            <Text>
-                {isSatisfied ? "Configuration satisfied" : "Configuration unsatisfied"}
-            </Text>
+            <Text>{isSatisfied ? "Configuration satisfied" : "Configuration unsatisfied"}</Text>
             {!isSatisfied && <ExplainButton onClick={onExplain}>Explain</ExplainButton>}
         </Root>
-    )
+    );
 }

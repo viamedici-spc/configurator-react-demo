@@ -18,8 +18,10 @@ export default function Menu() {
 
     return (
         <Root>
-            <button onClick={resetConfiguration} disabled={!canResetConfiguration}>Reset Configuration</button>
+            <button onClick={resetConfiguration} disabled={!canResetConfiguration}>
+                Reset Configuration
+            </button>
             <button onClick={reinitializeSession}>Re-initialize Configuration</button>
         </Root>
-    )
+    );
 }

@@ -31,33 +31,46 @@ export default function ValueSelection() {
         const value = pendingValue !== undefined ? round(pendingValue) : pendingValue;
 
         setPendingValue(null);
-        console.info("Make decision for %s: %s", attributeIdToString(attribute.id), value !== undefined ? value.toString() : "Undefined");
+        console.info(
+            "Make decision for %s: %s",
+            attributeIdToString(attribute.id),
+            value !== undefined ? value.toString() : "Undefined",
+        );
 
         if (value < attribute.range.min || value > attribute.range.max) {
-            alert(`Value is out of range [${attribute.range.min}; ${attribute.range.max}].`)
+            alert(`Value is out of range [${attribute.range.min}; ${attribute.range.max}].`);
             return;
         }
-        await handleDecisionResponse(() => makeDecision(value), e => {
-            if (e.type === ConfiguratorErrorType.SetDecisionConflict) {
-                return () => handleExplain(() => explain({question: ExplainQuestionType.whyIsStateNotPossible, state: value}, "full"), applySolution);
-            }
+        await handleDecisionResponse(
+            () => makeDecision(value),
+            e => {
+                if (e.type === ConfiguratorErrorType.SetDecisionConflict) {
+                    return () =>
+                        handleExplain(
+                            () => explain({question: ExplainQuestionType.whyIsStateNotPossible, state: value}, "full"),
+                            applySolution,
+                        );
+                }
 
-            return null;
-        });
+                return null;
+            },
+        );
     };
 
     return (
-        <Root type="number"
-              step={Math.pow(0.1, attribute.decimalPlaces)}
-              min={attribute.range.min}
-              max={attribute.range.max}
-              value={pendingValue !== null ? pendingValue ?? "" : attribute.decision?.state ?? ""}
-              onChange={e => onChange(e.currentTarget.value)}
-              onBlur={() => applyPendingValue()}
-              onKeyDownCapture={async e => {
-                  if (e.key === "Enter") {
-                      await applyPendingValue();
-                  }
-              }}/>
-    )
+        <Root
+            type="number"
+            step={Math.pow(0.1, attribute.decimalPlaces)}
+            min={attribute.range.min}
+            max={attribute.range.max}
+            value={pendingValue !== null ? (pendingValue ?? "") : (attribute.decision?.state ?? "")}
+            onChange={e => onChange(e.currentTarget.value)}
+            onBlur={() => applyPendingValue()}
+            onKeyDownCapture={async e => {
+                if (e.key === "Enter") {
+                    await applyPendingValue();
+                }
+            }}
+        />
+    );
 }

@@ -15,9 +15,9 @@ const Root = styled.div`
 `;
 
 export type StoredConfigurationEnvelop = {
-    readonly type: "spc-stored-configuration",
-    readonly storedConfiguration: StoredConfiguration
-}
+    readonly type: "spc-stored-configuration";
+    readonly storedConfiguration: StoredConfiguration;
+};
 
 export default function StoringMenu() {
     const storing = useConfigurationStoring();
@@ -26,7 +26,7 @@ export default function StoringMenu() {
         const storedConfiguration = await storing.storeConfiguration();
         const envelop = {
             type: "spc-stored-configuration",
-            storedConfiguration: storedConfiguration
+            storedConfiguration: storedConfiguration,
         } satisfies StoredConfigurationEnvelop;
 
         const json = JSON.stringify(envelop);
@@ -67,7 +67,7 @@ export default function StoringMenu() {
 
                 storing.restoreConfiguration(envelop.storedConfiguration, {
                     type: "DropExistingDecisions",
-                    conflictHandling: {type: "Automatic"}
+                    conflictHandling: {type: "Automatic"},
                 });
             };
 
@@ -87,5 +87,5 @@ export default function StoringMenu() {
             <button onClick={storeConfiguration}>Store configuration</button>
             <button onClick={restoreConfiguration}>Restore configuration</button>
         </Root>
-    )
+    );
 }

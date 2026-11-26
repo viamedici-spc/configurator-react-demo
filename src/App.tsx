@@ -12,12 +12,11 @@ const Root = styled.div`
     justify-content: center;
 `;
 
-createRoot(document.getElementById("app-container"))
-    .render((
-        <>
-            <GlobalStyle/>
-            <Root>
-                <Configurator/>
-            </Root>
-        </>
-    ));
+createRoot(document.getElementById("app-container")).render(
+    <>
+        <GlobalStyle />
+        <Root>
+            <Configurator />
+        </Root>
+    </>,
+);
