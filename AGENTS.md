@@ -14,9 +14,13 @@
 - **Sales Region as a Fixed Decision:** the Sales Region is deliberately *not* a dynamic `AttributeItem`. A hard-coded `<select>` in the header drives a `fixedDecisions` entry on the `SessionContext` (`{type: Choice, attributeId: {sharedConfigurationModelId: "SalesShared", localId: "SalesRegion"}, choiceValueId, state: Included}`). Because it is fixed at session creation, the engine trims the model to that region and the user cannot change it. Changing the region re-initializes the session.
 
 ## Build, Test, and Development Commands
-- `npm run dev` starts the Vite dev server on `http://localhost:3000`.
-- `npm run dev:hot` runs the dev server in hot-reload mode.
-- `npm run build` builds the app; `npm run preview` serves the build.
+- `bun install` installs (Bun is the package manager; never npm). Our own packages are exempt from the three-day minimum
+  release age in `bunfig.toml`, so library prereleases install right away.
+- `bun run dev` starts the Vite dev server on `http://localhost:3000` (with React Fast Refresh).
+- `bun run verify` is the gate, its steps in parallel: `bun check`, oxlint, `bun fmt --check`, the build.
+- `bun run build` builds the app into `dist/`; `bun run preview` serves the build.
+- CI (`.github/workflows/deploy.yml`) builds every push on the shared `pages-bun` workflow; it deploys to GitHub Pages
+  only on a manual run (`workflow_dispatch`) on `main`.
 
 ## Coding Style & Naming Conventions
 - TypeScript + React; `.tsx` for components; 4-space indentation; semicolons.
@@ -24,7 +28,7 @@
 - Import contract types, enums, and errors (e.g. `SessionContext`, `AttributeType`, `ChoiceValueDecisionState`, `FixedDecision`) from `@viamedici-spc/configurator-ts`; import hooks and the `Configuration` component from `@viamedici-spc/configurator-react`.
 
 ## Testing Guidelines
-- This is a manual demo without a unit-test suite. Verify changes by running `npm run dev` and driving the app in the browser (e.g. with the Playwright MCP): check the CreateSession request payload, attribute states, and trimming.
+- This is a manual demo without a unit-test suite. Verify changes by running `bun run dev` and driving the app in the browser (e.g. with the Playwright MCP): check the CreateSession request payload, attribute states, and trimming.
 
 ## Commit & Pull Request Guidelines
 - Commit history uses short, sentence-case messages, typically past tense (e.g. “Updated configurator-react to 4.2.0”).
@@ -33,3 +37,9 @@
 ## Configuration Tips
 - `src/config.ts` selects the engine and model. The endpoint/token must have the model (`Configurator-React-Demo-Car`) with the `SalesShared::SalesRegion` attribute deployed and must support the `fixedDecisions` CreateSession option.
 - The demo depends on published (pre)release versions of the libraries; bump `@viamedici-spc/configurator-ts` and `@viamedici-spc/configurator-react` in `package.json` to consume new library changes.
+
+## This repository is public
+
+Everything committed here is public. Code, comments and commit messages describe only the public API and observable
+behaviour — no engine internals, internal hosts, customer names or personal names. The demo's access token is a public
+token limited to the demo's configuration model.

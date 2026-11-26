@@ -63,13 +63,13 @@ To run the demo application locally, follow these steps:
 
 3. **Install dependencies:**
    ```bash
-   npm install
+   bun install
    yarn install
    ```
 
 4. **Start the development server:**
    ```bash
-   npm run dev
+   bun run dev
    yarn run dev
    ```
 
