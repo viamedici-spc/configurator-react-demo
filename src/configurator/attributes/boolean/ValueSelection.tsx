@@ -1,10 +1,11 @@
-import { useActiveAttribute } from "../AttributeItem";
-import { useBooleanAttribute } from "@viamedici-spc/configurator-react";
-import { ConfiguratorErrorType, DecisionKind, ExplainQuestionType, } from "@viamedici-spc/configurator-ts";
-import { handleDecisionResponse } from "../../../common/PromiseErrorHandling";
-import { attributeIdToString } from "../../../common/Naming";
-import CommonValueSelection, { AllowedValue } from "../CommonValueSelection";
-import { handleExplain } from "../../../common/Explain";
+import {useActiveAttribute} from "../AttributeItem";
+import {useBooleanAttribute} from "@viamedici-spc/configurator-react";
+import {ConfiguratorErrorType, DecisionKind, ExplainQuestionType} from "@viamedici-spc/configurator-ts";
+import {handleDecisionResponse} from "../../../common/PromiseErrorHandling";
+import {attributeIdToString} from "../../../common/Naming";
+import type {AllowedValue} from "../CommonValueSelection";
+import CommonValueSelection from "../CommonValueSelection";
+import {handleExplain} from "../../../common/Explain";
 
 /*
     Value id for "nothing selected"-option resp. reset-option
@@ -15,7 +16,7 @@ const falseValueId = "false";
 
 export default function ValueSelection() {
     const activeAttribute = useActiveAttribute();
-    const { attribute, makeDecision, explain, applySolution } = useBooleanAttribute(activeAttribute);
+    const {attribute, makeDecision, explain, applySolution} = useBooleanAttribute(activeAttribute);
 
     const onChange = async (valueId: string) => {
         if (valueId === nothingValueId) {
@@ -29,30 +30,43 @@ export default function ValueSelection() {
             if (attribute.possibleDecisionStates.includes(value)) {
                 console.info("Make decision for %s: %s", attributeIdToString(attribute.id), value.toString());
 
-                await handleDecisionResponse(() => makeDecision(value),
-                    (e) => {
+                await handleDecisionResponse(
+                    () => makeDecision(value),
+                    e => {
                         if (e.type === ConfiguratorErrorType.ConflictWithConsequence) {
-                            return () => handleExplain(() => explain({
-                                question: ExplainQuestionType.whyIsStateNotPossible,
-                                state: value,
-                            }, "full"), s => applySolution(s));
+                            return () =>
+                                handleExplain(
+                                    () =>
+                                        explain(
+                                            {
+                                                question: ExplainQuestionType.whyIsStateNotPossible,
+                                                state: value,
+                                            },
+                                            "full",
+                                        ),
+                                    s => applySolution(s),
+                                );
                         }
                         return null;
-                    }
+                    },
                 );
             } else {
                 console.info("Explain blocked value for %s: %s", attributeIdToString(attribute.id), value.toString());
 
-                await handleExplain(() => explain({ question: ExplainQuestionType.whyIsStateNotPossible, state: value }, "full"), applySolution);
+                await handleExplain(
+                    () => explain({question: ExplainQuestionType.whyIsStateNotPossible, state: value}, "full"),
+                    applySolution,
+                );
             }
         }
     };
 
-    const selectedValue = attribute.decision?.state === true
-        ? trueValueId
-        : attribute.decision?.state === false
-            ? falseValueId
-            : nothingValueId;
+    const selectedValue =
+        attribute.decision?.state === true
+            ? trueValueId
+            : attribute.decision?.state === false
+              ? falseValueId
+              : nothingValueId;
 
     const isTrueValuePossible = attribute.possibleDecisionStates.includes(true);
     const isFalseValuePossible = attribute.possibleDecisionStates.includes(false);
@@ -60,26 +74,20 @@ export default function ValueSelection() {
         id: falseValueId,
         name: "no",
         isImplicit: attribute.decision?.state === false && attribute.decision?.kind === DecisionKind.Implicit,
-        isImmutable: attribute.isPossibleDecisionStatesImmutable
+        isImmutable: attribute.isPossibleDecisionStatesImmutable,
     };
     const trueValue: AllowedValue<string> = {
         id: trueValueId,
         name: "yes",
         isImplicit: attribute.decision?.state === true && attribute.decision?.kind === DecisionKind.Implicit,
-        isImmutable: attribute.isPossibleDecisionStatesImmutable
+        isImmutable: attribute.isPossibleDecisionStatesImmutable,
     };
-    const allowedValues = [
-        isFalseValuePossible && falseValue,
-        isTrueValuePossible && trueValue
-    ];
-    const blockedValues = [
-        (!isFalseValuePossible) && falseValue,
-        (!isTrueValuePossible) && trueValue
-    ];
+    const allowedValues = [isFalseValuePossible && falseValue, isTrueValuePossible && trueValue];
+    const blockedValues = [!isFalseValuePossible && falseValue, !isTrueValuePossible && trueValue];
 
     return (
         <CommonValueSelection
-            nothingValue={{ id: nothingValueId, name: selectedValue !== nothingValueId ? "Reset" : "" }}
+            nothingValue={{id: nothingValueId, name: selectedValue !== nothingValueId ? "Reset" : ""}}
             allowedValues={allowedValues}
             blockedValues={blockedValues}
             isMultiselect={false}

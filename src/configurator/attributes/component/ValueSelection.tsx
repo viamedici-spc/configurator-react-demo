@@ -1,10 +1,16 @@
-import { useActiveAttribute } from "../AttributeItem";
-import { useComponentAttribute } from "@viamedici-spc/configurator-react";
-import { ComponentDecisionState, ConfiguratorErrorType, DecisionKind, ExplainQuestionType } from "@viamedici-spc/configurator-ts";
-import { handleDecisionResponse } from "../../../common/PromiseErrorHandling";
-import { attributeIdToString } from "../../../common/Naming";
-import CommonValueSelection, { AllowedValue } from "../CommonValueSelection";
-import { handleExplain } from "../../../common/Explain";
+import {useActiveAttribute} from "../AttributeItem";
+import {useComponentAttribute} from "@viamedici-spc/configurator-react";
+import {
+    ComponentDecisionState,
+    ConfiguratorErrorType,
+    DecisionKind,
+    ExplainQuestionType,
+} from "@viamedici-spc/configurator-ts";
+import {handleDecisionResponse} from "../../../common/PromiseErrorHandling";
+import {attributeIdToString} from "../../../common/Naming";
+import type {AllowedValue} from "../CommonValueSelection";
+import CommonValueSelection from "../CommonValueSelection";
+import {handleExplain} from "../../../common/Explain";
 
 /*
     Value id for "nothing selected"-option resp. reset-option
@@ -15,7 +21,7 @@ const excludedValueId = "excluded";
 
 export default function ValueSelection() {
     const activeAttribute = useActiveAttribute();
-    const { attribute, makeDecision, explain, applySolution } = useComponentAttribute(activeAttribute);
+    const {attribute, makeDecision, explain, applySolution} = useComponentAttribute(activeAttribute);
 
     const onChange = async (valueId: string) => {
         if (valueId === nothingValueId) {
@@ -24,34 +30,49 @@ export default function ValueSelection() {
                 await handleDecisionResponse(() => makeDecision(null));
             }
         } else {
-            const state = valueId === includedValueId ? ComponentDecisionState.Included : ComponentDecisionState.Excluded;
+            const state =
+                valueId === includedValueId ? ComponentDecisionState.Included : ComponentDecisionState.Excluded;
 
             if (attribute.possibleDecisionStates.includes(state)) {
                 console.info("Make decision for %s: %s", attributeIdToString(attribute.id), state.toString());
 
-                await handleDecisionResponse(() => makeDecision(state),
-                    (e) => {
+                await handleDecisionResponse(
+                    () => makeDecision(state),
+                    e => {
                         if (e.type === ConfiguratorErrorType.ConflictWithConsequence) {
-                            return () => handleExplain(() => explain({
-                                question: ExplainQuestionType.whyIsStateNotPossible,
-                                state
-                            }, "full"), s => applySolution(s));
+                            return () =>
+                                handleExplain(
+                                    () =>
+                                        explain(
+                                            {
+                                                question: ExplainQuestionType.whyIsStateNotPossible,
+                                                state,
+                                            },
+                                            "full",
+                                        ),
+                                    s => applySolution(s),
+                                );
                         }
                         return null;
-                    });
+                    },
+                );
             } else {
                 console.info("Explain blocked value for %s: %s", attributeIdToString(attribute.id), state.toString());
 
-                await handleExplain(() => explain({ question: ExplainQuestionType.whyIsStateNotPossible, state: state }, "full"), applySolution);
+                await handleExplain(
+                    () => explain({question: ExplainQuestionType.whyIsStateNotPossible, state: state}, "full"),
+                    applySolution,
+                );
             }
         }
     };
 
-    const selectedValue = attribute.decision?.state === ComponentDecisionState.Included
-        ? includedValueId
-        : attribute.decision?.state === ComponentDecisionState.Excluded
-            ? excludedValueId
-            : nothingValueId;
+    const selectedValue =
+        attribute.decision?.state === ComponentDecisionState.Included
+            ? includedValueId
+            : attribute.decision?.state === ComponentDecisionState.Excluded
+              ? excludedValueId
+              : nothingValueId;
 
     const isIncludedStatePossible = attribute.possibleDecisionStates.includes(ComponentDecisionState.Included);
     const isExcludedStatePossible = attribute.possibleDecisionStates.includes(ComponentDecisionState.Excluded);
@@ -59,27 +80,25 @@ export default function ValueSelection() {
     const excludedValue: AllowedValue<string> = {
         id: excludedValueId,
         name: "excluded",
-        isImplicit: attribute.decision?.state === ComponentDecisionState.Excluded && attribute.decision?.kind === DecisionKind.Implicit,
-        isImmutable: attribute.isPossibleDecisionStatesImmutable
+        isImplicit:
+            attribute.decision?.state === ComponentDecisionState.Excluded &&
+            attribute.decision?.kind === DecisionKind.Implicit,
+        isImmutable: attribute.isPossibleDecisionStatesImmutable,
     };
     const includedValue: AllowedValue<string> = {
         id: includedValueId,
         name: "included",
-        isImplicit: attribute.decision?.state === ComponentDecisionState.Included && attribute.decision?.kind === DecisionKind.Implicit,
-        isImmutable: attribute.isPossibleDecisionStatesImmutable
+        isImplicit:
+            attribute.decision?.state === ComponentDecisionState.Included &&
+            attribute.decision?.kind === DecisionKind.Implicit,
+        isImmutable: attribute.isPossibleDecisionStatesImmutable,
     };
-    const allowedValues = [
-        isExcludedStatePossible && excludedValue,
-        isIncludedStatePossible && includedValue
-    ];
-    const blockedValues = [
-        (!isExcludedStatePossible) && excludedValue,
-        (!isIncludedStatePossible) && includedValue
-    ];
+    const allowedValues = [isExcludedStatePossible && excludedValue, isIncludedStatePossible && includedValue];
+    const blockedValues = [!isExcludedStatePossible && excludedValue, !isIncludedStatePossible && includedValue];
 
     return (
         <CommonValueSelection
-            nothingValue={{ id: nothingValueId, name: selectedValue !== nothingValueId ? "Reset" : "" }}
+            nothingValue={{id: nothingValueId, name: selectedValue !== nothingValueId ? "Reset" : ""}}
             allowedValues={allowedValues}
             blockedValues={blockedValues}
             isMultiselect={false}

@@ -4,12 +4,12 @@ import ConfigurationSatisfactionIndicator from "./ConfigurationSatisfactionIndic
 import {Suspense, useMemo, useState} from "react";
 import {InitializationError, UpdateError} from "./ErrorIndicator";
 import {Configuration} from "@viamedici-spc/configurator-react";
+import type {SessionContext} from "@viamedici-spc/configurator-ts";
 import {
     AllowedRulesInExplainType,
     AttributeType,
     ChoiceValueDecisionState,
     ConfigurationModelSourceType,
-    SessionContext
 } from "@viamedici-spc/configurator-ts";
 import * as config from "../config";
 import Menu from "./Menu";
@@ -45,7 +45,7 @@ const SalesRegionSelect = styled.label`
 const Main = styled.div`
     grid-area: main;
     display: grid;
-    grid-template-rows:[error-indicator attributes] auto;
+    grid-template-rows: [error-indicator attributes] auto;
     grid-template-columns: [error-indicator attributes] 1fr;
 `;
 
@@ -59,26 +59,31 @@ export default function Configurator() {
 
     // A new SessionContext (by reference) makes the Configuration component re-create the session, so changing the
     // region re-initializes - with the Fixed Decision when a region is chosen, or without one when the choice is empty.
-    const sessionContext: SessionContext = useMemo(() => ({
-        apiBaseUrl: config.hcaEngineEndpoint,
-        sessionInitialisationOptions: {
-            accessToken: config.hcaEngineAccessToken,
-        },
-        configurationModelSource: {
-            type: ConfigurationModelSourceType.Channel,
-            deploymentName: config.configurationModelPackage.deploymentName,
-            channel: config.configurationModelPackage.channel
-        },
-        allowedInExplain: {rules: {type: AllowedRulesInExplainType.all}},
-        fixedDecisions: salesRegion
-            ? [{
-                type: AttributeType.Choice,
-                attributeId: {sharedConfigurationModelId: "SalesShared", localId: "SalesRegion"},
-                choiceValueId: salesRegion,
-                state: ChoiceValueDecisionState.Included
-            }]
-            : undefined
-    }), [salesRegion]);
+    const sessionContext: SessionContext = useMemo(
+        () => ({
+            apiBaseUrl: config.hcaEngineEndpoint,
+            sessionInitialisationOptions: {
+                accessToken: config.hcaEngineAccessToken,
+            },
+            configurationModelSource: {
+                type: ConfigurationModelSourceType.Channel,
+                deploymentName: config.configurationModelPackage.deploymentName,
+                channel: config.configurationModelPackage.channel,
+            },
+            allowedInExplain: {rules: {type: AllowedRulesInExplainType.all}},
+            fixedDecisions: salesRegion
+                ? [
+                      {
+                          type: AttributeType.Choice,
+                          attributeId: {sharedConfigurationModelId: "SalesShared", localId: "SalesRegion"},
+                          choiceValueId: salesRegion,
+                          state: ChoiceValueDecisionState.Included,
+                      },
+                  ]
+                : undefined,
+        }),
+        [salesRegion],
+    );
 
     return (
         <Root>
@@ -91,29 +96,29 @@ export default function Configurator() {
                 <select value={salesRegion} onChange={e => setSalesRegion(e.target.value as SalesRegion | "")}>
                     <option value="">(none)</option>
                     {["EU", "US"].map(region => (
-                        <option key={region} value={region}>{region}</option>
+                        <option key={region} value={region}>
+                            {region}
+                        </option>
                     ))}
                 </select>
             </SalesRegionSelect>
 
             <Configuration sessionContext={sessionContext}>
-
-               <Suspense>
-                   <ConfigurationSatisfactionIndicator/>
-                   <StoringMenu/>
-                   <Menu/>
-               </Suspense>
+                <Suspense>
+                    <ConfigurationSatisfactionIndicator />
+                    <StoringMenu />
+                    <Menu />
+                </Suspense>
 
                 <Main>
-                    <InitializationError/>
+                    <InitializationError />
 
                     <Suspense fallback={<span>Configuration loading …</span>}>
-                        <UpdateError/>
-                        <Attributes/>
+                        <UpdateError />
+                        <Attributes />
                     </Suspense>
                 </Main>
-
             </Configuration>
         </Root>
-    )
+    );
 }

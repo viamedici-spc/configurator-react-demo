@@ -16,16 +16,16 @@ const Root = styled.div`
 export default function Attributes() {
     return (
         <Root>
-            <AttributeItem attributeId={{sharedConfigurationModelId: "SalesShared", localId: "SalesRegion"}}/>
-            <AttributeItem attributeId={{localId: "Construction"}}/>
-            <AttributeItem attributeId={{localId: "Transmission"}}/>
-            <AttributeItem attributeId={{componentPath: ["Transmission"], localId: "Type"}}/>
-            <AttributeItem attributeId={{localId: "EngineType"}}/>
-            <AttributeItem attributeId={{localId: "HeavyDuty"}}/>
-            <AttributeItem attributeId={{localId: "HorsePower"}}/>
-            <AttributeItem attributeId={{localId: "Accessories"}}/>
-            <AttributeItem attributeId={{localId: "SpareWheel"}}/>
-            <AttributeItem attributeId={{localId: "Color"}}/>
+            <AttributeItem attributeId={{sharedConfigurationModelId: "SalesShared", localId: "SalesRegion"}} />
+            <AttributeItem attributeId={{localId: "Construction"}} />
+            <AttributeItem attributeId={{localId: "Transmission"}} />
+            <AttributeItem attributeId={{componentPath: ["Transmission"], localId: "Type"}} />
+            <AttributeItem attributeId={{localId: "EngineType"}} />
+            <AttributeItem attributeId={{localId: "HeavyDuty"}} />
+            <AttributeItem attributeId={{localId: "HorsePower"}} />
+            <AttributeItem attributeId={{localId: "Accessories"}} />
+            <AttributeItem attributeId={{localId: "SpareWheel"}} />
+            <AttributeItem attributeId={{localId: "Color"}} />
         </Root>
-    )
+    );
 }
